@@ -1,5 +1,5 @@
 #Faça um programa que calcule a seguinte equação:
-#y = 3x2 - 5x + 13
+#y = 3x^2 - 5x + 13
 #Armazene x no registrador $t5 com a instrução addi $t5, $zero, x, substituindo x pelo
 #valor desejado, e sempre que precisar o valor de x, utilize o valor armazenado no
 #registrador $t5.
@@ -9,22 +9,26 @@
 #equivalente e responda, nos comentários, qual o resultado quando são usados números
 #positivos e números negativos.
 
-.text 
-	# t0 = resultado
-	# t1 = 3x^2
-	# t2 = 5x
-	# t3 = 13
-	# t4 = x
+.data
+	x: .word -2
+	y: .space 4
 	
-	addi $t4, $zero, -2
+.text
+	lui $t0, 0x1001
+	lw $t5, 0($t0)		# x
 	
-	ori $t3, $zero, 13
+	# PARCIAIS
+	ori $t3, $zero, 13	# 13
+	sll $t2, $t5, 2		
+	add $t2, $t2, $t5	# 5x
+	mult $t5, $t5
+	mflo $t1			# x^2
+	sll $t7, $t1, 1		# 2x^2
+	add $t1, $t7, $t1	# 3x^2
 	
-	sll $t2, $t4, 2
-	add, $t2, $t2, $t4
+	sub $t6, $t1, $t2
+	add $t6, $t6, $t3
 	
-	mult $t4, $t4
-	mflo $t1
+	sw $t6, 0x4($t0)
 	
-	sll $t5, $t1, 1
-	add $t1, $t5, $t1
+	
